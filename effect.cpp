@@ -1,252 +1,281 @@
-// #include "effect.h"
+#include "effect.h"
 
-// Effect::Effect()
-// {
-// }
+Effect::Effect()
+{
+}
 
-// Effect::Effect(int x, int y, int dx, int dy, int d)
-// {
-//     this->x = x;
-//     this->y = y;
-//     this->dx = dx;
-//     this->dy = dy;
-//     this->d = d;
-// }
+Effect::Effect(int x, int y, int dx, int dy)
+{
+    this->x = x;
+    this->y = y;
+    this->dx = dx;
+    this->dy = dy;
+}
 
-// EffectZero::EffectZero()
-// {
-// }
+EffectZero::EffectZero()
+{
+}
 
-// EffectZero::EffectZero(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+EffectZero::EffectZero(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
 
-// void EffectZero::apply(Board *board)
-// {
-//     int *a = new int;
+void EffectZero::apply(int **board)
+{
+    for (int i = x; i <= dx; i++)
+        for (int j = y; j <= dy; j++)
+            board[i][j] = 0;
+}
 
-//     for (int i = x; i <= dx; i++)
-//         for (int j = y; j <= dy; j++)
-//             board -> getCondition(i, j) = 0;
-// }
+EffectOne::EffectOne()
+{
+}
 
-// EffectOne::EffectOne()
-// {
-// }
+EffectOne::EffectOne(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
 
-// EffectOne::EffectOne(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+void EffectOne::apply(int **board)
+{
+    for (int i = x; i <= dx; i++)
+        for (int j = y; j <= dy; j++)
+            board[i][j] = 1;
+}
 
-// void EffectOne::apply(Board *board)
-// {
-//     for (int i = x; i <= dx; i++)
-//         for (int j = y; j <= dy; j++)
-//             board -> getCondition(i, j) = 1;
-// }
+EffectTwo::EffectTwo()
+{
+}
 
-// EffectTwo::EffectTwo()
-// {
-// }
+EffectTwo::EffectTwo(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
 
-// EffectTwo::EffectTwo(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+void EffectTwo::apply(int **board)
+{
+    for (int i = x; i <= dx; i++)
+    {
+        for (int j = y; j <= dy; j++)
+        {
+            if (board[i][j] == 0)
+                board[i][j] = 1;
+            else
+                board[i][j] = 0;
+        }
+    }
+}
 
-// void EffectTwo::apply(Board * board)
-// {
-//     for (int i = x; i <= dx; i++)
-//         for (int j = y; j <= dy; j++)
-//         {
-//             if (board -> getCondition(i, j) == 0)
-//                 board -> getCondition(i, j) = 1;
-//             else
-//                 board -> getCondition(i, j) = 0;
-//         }
-// }
+EffectThree::EffectThree()
+{
+}
 
-// EffectThree::EffectThree()
-// {
-// }
+EffectThree::EffectThree(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
 
-// EffectThree::EffectThree(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+void EffectThree::apply(int **board)
+{
+    int copyBoard[16][16];
 
-// void EffectThree::apply(Board * board)
-// {
-//     for (int i = x; i <= dx; i++)
-//     {
-//         for (int j = y; j <= dy; j++)
-//         {
-//             if (board -> getCondition(i, j).getValueCondition() == 1)
-//             {
-//                 int neighbourCount = 0;
-//                 for (int n = -1; n < 2; n++)
-//                 {
-//                     for (int m = -1; m < 2; m++)
-//                     {
-//                         if (!(n == 0 && m == 0))
-//                         {
-//                             int a = i + n;
-//                             int b = j + m;
-//                             switch (a)
-//                             {
-//                             case -1:
-//                                 a = 15;
-//                                 break;
-//                             case 16:
-//                                 a = 0;
-//                                 break;
-//                             }
+    for (int i = 0; i < 16; i++)
+        for (int j = 0; j < 16; j++)
+            copyBoard[i][j] = board[i][j];
 
-//                             switch (b)
-//                             {
-//                             case -1:
-//                                 b = 15;
-//                                 break;
-//                             case 16:
-//                                 b = 0;
-//                                 break;
-//                             }
-//                             if ((board -> getCondition(i, j).getValueCondition() == 1))
-//                                 ++neighbourCount;
-//                         }
-//                     }
-//                 }
-//                 if (!(neighbourCount == 2 || neighbourCount == 3))
-//                     board -> getCondition(i, j) = 0;
-//                 else
-//                     board -> getCondition(i, j) = 0;
-//             }
-//             else
-//                 board -> getCondition(i, j) = 0;
-//         }
-//     }
-// }
+    for (int i = x; i <= dx; i++)
+    {
+        for (int j = y; j <= dy; j++)
+        {
+            if (copyBoard[i][j] == 1)
+            {
+                int neighbourCount = 0;
+                for (int n = -1; n < 2; n++)
+                {
+                    for (int m = -1; m < 2; m++)
+                    {
+                        if (!(n == 0 && m == 0))
+                        {
+                            int a = i;
+                            int b = j;
+                            a += n;
+                            b += m;
+                            switch (a)
+                            {
+                            case -1:
+                                a = 15;
+                                break;
+                            case 16:
+                                a = 0;
+                                break;
+                            }
 
-// EffectFour::EffectFour()
-// {
-// }
+                            switch (b)
+                            {
+                            case -1:
+                                b = 15;
+                                break;
+                            case 16:
+                                b = 0;
+                                break;
+                            }
+                            if (copyBoard[a][b] == 1)
+                                ++neighbourCount;
+                        }
+                    }
+                }
+                if (!(neighbourCount == 2 || neighbourCount == 3))
+                    board[i][j] = 0;
+                else
+                    board[i][j] = 1;
+            }
+            else
+                board[i][j] = 0;
+        }
+    }
+}
 
-// EffectFour::EffectFour(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+EffectFour::EffectFour()
+{
+}
 
-// void EffectFour::apply(Board * board)
-// {
-//     for (int i = x; i <= dx; i++)
-//     {
-//         for (int j = y; j <= dy; j++)
-//         {
-//             if (board -> getCondition(i, j).getValueCondition() == 0)
-//             {
-//                 int neighbourCount = 0;
-//                 for (int n = -1; n < 2; n++)
-//                 {
-//                     for (int m = -1; m < 2; m++)
-//                     {
-//                         if (!(n == 0 && m == 0))
-//                         {
-//                             int a = i + n;
-//                             int b = j + m;
-//                             switch (a)
-//                             {
-//                             case -1:
-//                                 a = 15;
-//                                 break;
-//                             case 16:
-//                                 a = 0;
-//                                 break;
-//                             }
+EffectFour::EffectFour(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
 
-//                             switch (b)
-//                             {
-//                             case -1:
-//                                 b = 15;
-//                                 break;
-//                             case 16:
-//                                 b = 0;
-//                                 break;
-//                             }
-//                             if ((board -> getCondition(i, j).getValueCondition() == 1))
-//                                 ++neighbourCount;
-//                         }
-//                     }
-//                 }
-//                 if (neighbourCount == 3)
-//                     board -> getCondition(i, j) = 1;
-//                 else
-//                     board -> getCondition(i, j) = 0;
-//             }
-//             else
-//                 board -> getCondition(i, j) = 0;
-//         }
-//     }
-// }
+void EffectFour::apply(int **board)
+{
+    int copyBoard[16][16];
 
-// EffectFive::EffectFive()
-// {
-// }
+    for (int i = 0; i < 16; i++)
+        for (int j = 0; j < 16; j++)
+            copyBoard[i][j] = board[i][j];
 
-// EffectFive::EffectFive(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+    for (int i = x; i <= dx; i++)
+    {
+        for (int j = y; j <= dy; j++)
+        {
+            if (copyBoard[i][j] == 0)
+            {
+                int neighbourCount = 0;
 
-// void EffectFive::apply(Board *board)
-// {
-//     if (!isSave)
-//     {
-//         this -> board = board;
-//         isSave = true;
-//     }
-//     else
-//     {
-//         for (int i = x; i <= dx; i++)
-//         {
-//             for (int j = y; j <= dy; j++)
-//             {
-//                 if (board.getCondition(i, j)== 0 && boards.at(1).getCondition(i, j)== 1)
-//                     boards.at(1).getCondition(i, j) = 1;
-//                 if (board.getCondition(i, j)== 1 && boards.at(1).getCondition(i, j)== 0)
-//                     boards.at(1).getCondition(i, j) = 1;
-//                 if (board.getCondition(i, j)== 1 && boards.at(1).getCondition(i, j)== 1)
-//                     boards.at(1).getCondition(i, j) = 0;
-//                 if (board.getCondition(i, j)== 0 && boards.at(1).getCondition(i, j).getValueCondition() == 0)
-//                     boards.at(1).getCondition(i, j) = 0;
-//             }
-//         }
-//         isSave = false;
-//     }
-// }
+                for (int n = -1; n < 2; n++)
+                {
+                    for (int m = -1; m < 2; m++)
+                    {
+                        if (!(m == 0 && n == 0))
+                        {
+                            int a = i;
+                            int b = j;
+                            a += n;
+                            b += m;
+                            switch (a)
+                            {
+                            case -1:
+                                a = 15;
+                                break;
+                            case 16:
+                                a = 0;
+                                break;
+                            }
 
-// EffectSix::EffectSix()
-// {
-// }
+                            switch (b)
+                            {
+                            case -1:
+                                b = 15;
+                                break;
+                            case 16:
+                                b = 0;
+                                break;
+                            }
+                            if (copyBoard[a][b] == 1)
+                                ++neighbourCount;
+                        }
+                    }
+                }
+                if (neighbourCount == 3)
+                    board[i][j] = 1;
+                else
+                    board[i][j] = 0;
+            }
+            else
+                board[i][j] = 0;
+        }
+    }
+}
 
-// EffectSix::EffectSix(int x, int y, int dx, int dy, int d) : Effect(x, y, dx, dy, d)
-// {
-// }
+EffectFive::EffectFive()
+{
+    isSave = false;
+}
 
-// void EffectSix::apply(Board * board)
-// {
-//     if (!isSave)
-//     {
-//        this -> board = board;
-//         isSave = true;
-//     }
-//     else
-//     {
-//         for (int i = x; i <= dx; i++)
-//         {
-//             for (int j = y; j <= dy; j++)
-//             {
-//                 if (this -> board.getCondition(i, j) == 1 )
-//                     board.getCondition(i, j) = 1;
-//                 if (this -> board.getCondition(i, j) == 0 )
-//                     board.getCondition(i, j) = 0;
-//             }
-//         }
-//         isSave = false;
-//     }
-// }
+EffectFive::EffectFive(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
+
+void EffectFive::apply(int **board)
+{
+    if (!isSave)
+    {
+        int **initializerTable = new int *[16];
+        for (int i = 0; i < 16; i++)
+            initializerTable[i] = new int[16];
+        savedBoard = initializerTable;
+        for (int i = x; i <= dx; i++)
+        {
+            for (int j = y; j <= dy; j++)
+            {
+                savedBoard[i][j] = board[i][j];
+            }
+        }
+        isSave = true;
+    }
+    else
+    {
+        for (int i = x; i <= dx; i++)
+        {
+            for (int j = y; j <= dy; j++)
+            {
+
+                board[i][j] = (savedBoard[i][j] & 1) ^ (board[i][j] & 1);
+            }
+        }
+        isSave = false;
+    }
+}
+
+EffectSix::EffectSix()
+{
+    isSave = false;
+}
+
+EffectSix::EffectSix(int x, int y, int dx, int dy) : Effect(x, y, dx, dy)
+{
+}
+
+void EffectSix::apply(int **board)
+{
+    if (!isSave)
+    {
+        int **initializerTable = new int *[16];
+        for (int i = 0; i < 16; i++)
+            initializerTable[i] = new int[16];
+        this->savedBoard = initializerTable;
+        for (int i = x; i <= dx; i++)
+        {
+            for (int j = y; j <= dy; j++)
+            {
+                this->savedBoard[i][j] = board[i][j];
+            }
+        }
+        isSave = true;
+    }
+    else
+    {
+        for (int i = x; i <= dx; i++)
+        {
+            for (int j = y; j <= dy; j++)
+            {
+               this->savedBoard[i][j] = board[i][j];
+            }
+        }
+        isSave = false;
+    }
+}
